@@ -1,0 +1,72 @@
+name: "Terraform"
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+  workflow_dispatch:
+
+jobs:
+  terraform:
+    name: "Terraform"
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Terraform Init
+        id: init
+        run: terraform init
+      - name: Cache Terraform
+        uses: actions/cache@v2
+        with:
+          path: ${{ github.workspace }}/.terraform
+          key: ${{ runner.os }}-terraform-${{ hashFiles('**/.terraform.lock.hcl') }}
+      - name: Terraform Plan
+        id: Plan
+        run: terraform plan
+      - name: Debug Info Plan
+        run: ls -la ./*
+
+  terraform_apply:
+    name: "Terraform Apply"
+    runs-on: ubuntu-latest
+    needs: terraform
+    environment:
+      name: prod
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Terraform Init
+        id: init
+        run: terraform init
+      - name: Debug Info Init
+        run: ls -la ./*
+      - name: Cache Terraform
+        uses: actions/cache@v2
+        with:
+          path: ${{ github.workspace }}/.terraform
+          key: ${{ runner.os }}-terraform-${{ hashFiles('**/.terraform.lock.hcl') }}
+      - name: Debug Info Cache
+        run: ls -la ./*
+      - name: Terraform Apply
+        run: terraform apply --auto-approve
+
+  terraform_Destroy:
+    name: "Terraform Destroy"
+    runs-on: ubuntu-latest
+    needs: terraform
+    environment:
+      name: des
+    steps:
+      - name: Cache Terraform
+        uses: actions/cache@v2
+        with:
+          path: ${{ github.workspace }}/.terraform
+          key: ${{ runner.os }}-terraform-${{ hashFiles('**/.terraform.lock.hcl') }}
+      - name: Terraform destroy
+        run: terraform destroy --auto-approve
