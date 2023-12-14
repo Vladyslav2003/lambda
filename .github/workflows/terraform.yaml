@@ -27,6 +27,9 @@ jobs:
           key: ${{ runner.os }}-terraform-${{ hashFiles('**/.terraform.lock.hcl') }}
       - name: Terraform Plan
         id: Plan
+        env:
+          TF_VAR_access_key: ${{ secrets.access_key }}
+          TF_VAR_secret_key: ${{ secrets.secret_key }}
         run: terraform plan
       - name: Debug Info Plan
         run: ls -la ./*
@@ -54,6 +57,9 @@ jobs:
       - name: Debug Info Cache
         run: ls -la ./*
       - name: Terraform Apply
+        env:
+          TF_VAR_access_key: ${{ secrets.access_key }}
+          TF_VAR_secret_key: ${{ secrets.secret_key }}
         run: terraform apply --auto-approve
 
   terraform_Destroy:
@@ -69,4 +75,7 @@ jobs:
           path: ${{ github.workspace }}/.terraform
           key: ${{ runner.os }}-terraform-${{ hashFiles('**/.terraform.lock.hcl') }}
       - name: Terraform destroy
+        env:
+          TF_VAR_access_key: ${{ secrets.access_key }}
+          TF_VAR_secret_key: ${{ secrets.secret_key }}
         run: terraform destroy --auto-approve

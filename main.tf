@@ -7,18 +7,10 @@ terraform {
   }
 }
 
-# provider "aws" {
-#     region = "us-east-1"
-#     access_key = var.access_key
-#     secret_key = var.secret_key
-
-# }
-
 provider "aws" {
-    region = "us-east-1"
-    access_key = ${{ secrets.SECRET_KEY }}
-    secret_key = ${{ secrets.VAR_ACCESS_KEY }}
-
+  region     = "us-east-1"
+  access_key = var.access_key
+  secret_key = var.secret_key
 }
 
 data "aws_iam_policy_document" "assume_role" {
@@ -41,7 +33,7 @@ resource "aws_iam_role" "iam_for_lambda" {
 
 data "archive_file" "lambda" {
   type        = "zip"
-  source_file = "lambda/app/hello.py"
+  source_file = "hello.py"
   output_path = "hello.zip"
 }
 
@@ -62,14 +54,12 @@ resource "aws_lambda_function" "test_lambda" {
   }
 }
 
+variable "access_key" {
+  type      = string
+  sensitive = true
+}
 
-# variable "access_key" {
-#   type        = string
-#   sensitive = true
-# }
-
-
-# variable "secret_key" {
-#   type        = string
-#   sensitive = true
-# }
+variable "secret_key" {
+  type      = string
+  sensitive = true
+}
