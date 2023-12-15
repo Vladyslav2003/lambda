@@ -9,8 +9,8 @@ jobs:
         uses: montudor/action-zip@v1
 
       - name: Zip output
-        run: zip -qq -r hello.zip . -i hello.py
-        working-directory: ../../
+        run: zip -qq -r hello.zip -i hello.py
+        working-directory: ./
 
       - name: checkout source code
         uses: actions/checkout@v3
