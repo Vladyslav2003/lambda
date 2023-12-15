@@ -15,11 +15,7 @@ jobs:
         # working-directory: ./
 
       - name: List files in working directory
-        run: ls -l
-        working-directory: ./
-
-      - name: checkout source code
-        uses: actions/checkout@v3
+        run: ls -l ./
       - name: Auth AWS
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -28,7 +24,6 @@ jobs:
           aws-secret-access-key: ${{ secrets.SECRET_KEY }}
       - name: Update of Lambda
         run: >
-
           aws lambda update-function-code
           --function-name lambda_function_name
           --zip-file fileb://hello.zip
