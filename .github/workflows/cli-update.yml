@@ -5,16 +5,15 @@ jobs:
     name: Deploy lambda function from source
     runs-on: ubuntu-latest
     steps:
+      - name: Install zip
+        uses: montudor/action-zip@v1
+
+      - name: Zip output
+        run: zip -qq -r hello.zip hello.py
+        working-directory: ../../
+
       - name: checkout source code
         uses: actions/checkout@v3
-      # - name: default deploy
-      #   uses: appleboy/lambda-action@v0.1.9
-      #   with:
-      #     aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      #     aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      #     aws_region: ${{ secrets.REGION }}
-      #     function_name: example_lambda
-      #     source: hello.py
       - name: Auth AWS
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -23,6 +22,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.SECRET_KEY }}
       - name: Update of Lambda
         run: >
+
           aws lambda update-function-code
           --function-name lambda_function_name
           --zip-file fileb://hello.zip
