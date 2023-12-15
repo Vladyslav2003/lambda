@@ -18,7 +18,7 @@ jobs:
       - name: Auth AWS
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-region: ${{ secrets.REGION }}
+          aws-region: us-east-1
           aws-access-key-id: ${{ secrets.ACCESS_KEY }}
           aws-secret-access-key: ${{ secrets.SECRET_KEY }}
       - name: Update of Lambda
