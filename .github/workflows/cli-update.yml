@@ -13,11 +13,12 @@ jobs:
 
       - name: Zip output
         run: zip -r hello.zip . -i hello.py
+        working-directory: ./
       # - name: Install zip
       #   uses: montudor/action-zip@v1
       # - name: Zip output
       #   run: zip -r hello.zip . -i hello.py
-      #   working-directory: ./
+      #  working-directory: ./
 
       - name: checkout source code
         uses: actions/checkout@v3
