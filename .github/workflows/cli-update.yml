@@ -12,7 +12,7 @@ jobs:
         uses: montudor/action-zip@v1
 
       - name: Zip output
-        run: zip -r hello.zip . -i hello.py
+        run: zip -r ../../hello.zip . -i hello.py
         working-directory: ./
       # - name: Install zip
       #   uses: montudor/action-zip@v1
