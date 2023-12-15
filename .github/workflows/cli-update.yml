@@ -25,4 +25,4 @@ jobs:
 
           aws lambda update-function-code
           --function-name lambda_function_name
-          --zip-file fileb://hello.zip
+          --zip-file hello.zip
