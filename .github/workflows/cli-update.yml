@@ -7,11 +7,22 @@ jobs:
     steps:
       - name: checkout source code
         uses: actions/checkout@v3
-      - name: default deploy
-        uses: appleboy/lambda-action@v0.1.9
+      # - name: default deploy
+      #   uses: appleboy/lambda-action@v0.1.9
+      #   with:
+      #     aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #     aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      #     aws_region: ${{ secrets.REGION }}
+      #     function_name: example_lambda
+      #     source: hello.py
+      - name: Auth AWS
+        uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws_region: ${{ secrets.REGION }}
-          function_name: example_lambda
-          source: hello.py
+          aws-region: us-east-1
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      - name: Update of Lambda
+        run: |
+          aws lambda update-function-code
+          --function-name lambda_function_name
+          --zip-file fileb://hello.zip
